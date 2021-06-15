@@ -18,9 +18,9 @@ var passport = require('passport');
 // [SH] Bring in the data model
 require('./api/models/db');
 
-require('./api/config/seed');
+require('./server/config/seed');
 // [SH] Bring in the Passport config after model is defined
-require('./api/config/passport');
+require('./server/config/passport');
 
 
 // [SH] Bring in the routes for the API (delete the default routes)
