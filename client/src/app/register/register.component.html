@@ -1,0 +1,74 @@
+<div class="form-signin text-center">
+  <div class="container">
+    <div class="row">
+      <form (submit)="register()">
+        <img
+          class="mb-4"
+          src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg"
+          alt=""
+          width="72"
+          height="57"
+        />
+        <h1 class="h3 mb-3 fw-normal">Register New User</h1>
+        <p class="lead">
+        Existing users please <a routerLink="/login">log in</a>.
+        </p>
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+          Registration Error: {{ error }}
+        </div>
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control input-top"
+            name="name"
+            placeholder="Enter your name"
+            [(ngModel)]="credentials.name"
+          required/>
+          <label for="floatingInput">Full Name</label>
+          <div class="invalid-feedback">
+            Please choose a username.
+          </div>
+        </div>
+        <div class="form-floating">
+          <input
+            type="email"
+            class="form-control input-middle"
+            name="email"
+            placeholder="Enter email"
+            [(ngModel)]="credentials.email"
+          />
+          <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+          <input
+            type="password"
+            class="form-control input-middle"
+            name="password"
+            placeholder="Password"
+            [(ngModel)]="credentials.password"
+          />
+          <label for="floatingPassword">Password</label>
+        </div>
+        <div class="form-floating">
+          <input
+            type="password"
+            class="form-control input-bottom"
+            name="passwordConfirm"
+            placeholder="Confirm Password"
+            [(ngModel)]="passConf"
+          />
+          <label for="floatingPassword">Confirm Password</label>
+        </div>
+
+        <!-- <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me" /> Remember me
+        </label>
+      </div> -->
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+          Register
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
