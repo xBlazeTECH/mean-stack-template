@@ -23,9 +23,9 @@
     </div>
 
     <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
+    <label>Syncs in realtime across clients</label> {{newThing.name}}
     <p class="input-group">
-      <input type="text" class="form-control" placeholder="Add a new thing here." [(ngModel)]="newThing">
+      <input type="text" class="form-control" placeholder="Add a new thing here." [(ngModel)]="newThing.name" name="name">
       <span class="input-group-btn">
         <button type="submit" class="btn btn-primary" (click)="addThing()">Add New</button>
       </span>
