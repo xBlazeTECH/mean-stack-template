@@ -1,9 +1,10 @@
 {
-  "name": "MEAN-stack-authentication",
+  "name": "mean-stack-template",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon ./server/app.js"
+    "start": "node app.js",
+    "watch": "nodemon app.js"
   },
   "dependencies": {
     "body-parser": "~1.10.2",
