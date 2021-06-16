@@ -17,8 +17,8 @@
           <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
         </form>
         <div class="text-end" *ngIf="!auth.isLoggedIn()">
-          <a class="btn btn-outline-light me-2" routerLink="/login">Login</a>
-          <a class="btn btn-warning" routerLink="/register">Sign-up</a>
+          <a class="btn btn-outline-light me-2" routerLink="/account/login">Login</a>
+          <a class="btn btn-warning" routerLink="/account/register">Sign-up</a>
         </div>
         <div class="dropdown text-end" *ngIf="auth.isLoggedIn()">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
