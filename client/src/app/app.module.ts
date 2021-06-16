@@ -13,6 +13,10 @@ import { RegisterComponent } from './account/register/register.component';
 import { AuthenticationService } from './authentication.service';
 import { AuthGuardService } from './auth-guard.service';
 
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:9000', options: {}};
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +30,8 @@ import { AuthGuardService } from './auth-guard.service';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [AuthenticationService, AuthGuardService],
   bootstrap: [AppComponent]
