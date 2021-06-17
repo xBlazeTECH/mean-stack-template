@@ -4,7 +4,7 @@ function onDisconnect(socket) {
 
 }
 
-function onConnect(socket, app) {
+function onConnect(socket, myEmitter) {
   // Send a message to connected clients.
   socket.emit('connected', {});
   socket.on('info', function (data) {
@@ -15,10 +15,10 @@ function onConnect(socket, app) {
     socket.emit('pong', socket.connectedAt);
   });
 
-  require('../api/thing/thing.socket').register(socket, app);
+  require('../api/thing/thing.socket').register(socket, myEmitter);
 }
 
-module.exports = function(socketio, app) {
+module.exports = function(socketio, myEmitter) {
   // socket.io (v1.x.x) is powered by debug.
   // In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
   //
@@ -32,39 +32,6 @@ module.exports = function(socketio, app) {
   //   secret: config.secrets.session,
   //   handshake: true
   // }));
-
-  class Observable {
-    constructor(functionThatTakesObserver) {
-      this._functionThatTakesObserver = functionThatTakesObserver;
-    }
-
-    subscribe(observer) {
-      return this._functionThatTakesObserver(observer);
-    }
-  }
-
-  let myObservable = new Observable((observer) => {
-    app.use(function (req, res, next) {
-      console.log("Type: " + req.method);
-      console.log("Time:", Date.now());
-      observer.next("got data");
-      next();
-    });
-  });
-
-  let myObserver = {
-    next(data) {
-      console.log(data);
-    },
-    error(e) {
-      console.log(e);
-    },
-    complete() {
-      console.log("request complete");
-    },
-  };
-
-  myObservable.subscribe(myObserver);
 
     socketio.on("connection", function (socket) {
       //console.log(socket);
@@ -84,7 +51,7 @@ module.exports = function(socketio, app) {
       });
 
       // Call onConnect.
-      onConnect(socket, app);
+      onConnect(socket, myEmitter);
       console.info(`[${socket.handshake.address}] CONNECTED`);
     });
 }

@@ -1,7 +1,17 @@
-var thing = require("./thing.model");
+//var thing = require("./thing.model");
 
-exports.register = function (app) {
+exports.register = function (socket, myEmitter) {
   console.log("Registering Thing Socket!");
+
+  myEmitter.on('save', function (doc) {
+    console.log("Saved Thing");
+    onSave(socket, doc);
+  })
+
+  myEmitter.on('remove', function (doc) {
+    console.log("Removed Thing");
+    onRemove(socket, doc);
+  })
 
   // thing.schema.post("save", function (doc) {
   //   console.log("Saved Thing");

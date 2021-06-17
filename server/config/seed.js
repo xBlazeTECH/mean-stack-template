@@ -1,8 +1,9 @@
-var Thing = require("../api/thing/thing.model");
+const mongoose = require("mongoose");
+const Thing = require("../api/thing/thing.model").get();
 var User = require("../api/user/user.model");
 
-Thing.model.find({}).remove(function () {
-  Thing.model.create(
+Thing.find({}).remove(function () {
+  Thing.create(
     {
       name: "Development Tools",
       info: "Integration with popular tools such as Bower, Grunt, Karma, Mocha, JSHint, Node Inspector, Livereload, Protractor, Jade, Stylus, Sass, CoffeeScript, and Less.",

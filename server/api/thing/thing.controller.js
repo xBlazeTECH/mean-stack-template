@@ -8,11 +8,13 @@
  */
 
 var _ = require("lodash");
-var Thing = require("./thing.model");
+//var Thing = require("./thing.model");
+
+var Thing = require("./thing.model").get();
 
 // Get list of things
 exports.index = function (req, res) {
-  Thing.model.find(function (err, things) {
+  Thing.find(function (err, things) {
     if (err) {
       return handleError(res, err);
     }
@@ -22,7 +24,7 @@ exports.index = function (req, res) {
 
 // Get a single thing
 exports.show = function (req, res) {
-  Thing.model.findById(req.params.id, function (err, thing) {
+  Thing.findById(req.params.id, function (err, thing) {
     if (err) {
       return handleError(res, err);
     }
@@ -35,7 +37,7 @@ exports.show = function (req, res) {
 
 // Creates a new thing in the DB.
 exports.create = function (req, res) {
-  Thing.model.create(req.body, function (err, thing) {
+  Thing.create(req.body, function (err, thing) {
     if (err) {
       return handleError(res, err);
     }
@@ -48,7 +50,7 @@ exports.update = function (req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  Thing.model.findById(req.params.id, function (err, thing) {
+  Thing.findById(req.params.id, function (err, thing) {
     if (err) {
       return handleError(res, err);
     }
@@ -67,7 +69,7 @@ exports.update = function (req, res) {
 
 // Deletes a thing from the DB.
 exports.destroy = function (req, res) {
-  Thing.model.findById(req.params.id, function (err, thing) {
+  Thing.findById(req.params.id, function (err, thing) {
     if (err) {
       return handleError(res, err);
     }

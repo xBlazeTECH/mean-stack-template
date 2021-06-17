@@ -2,17 +2,21 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
-var ThingSchema = new Schema({
-  name: String,
-  info: String,
-  active: Boolean,
-});
-  ThingSchema.post("save", function () {
-    console.log('dbsave');
+module.exports.create = function (myEmitter) {
+  var ThingSchema = new Schema({
+    name: String,
+    info: String,
+    active: Boolean,
   });
-  ThingSchema.post("remove", function () {
-    console.log('dbremove');
+  ThingSchema.post("save", function (doc) {
+    myEmitter.emit("save", doc);
   });
-module.exports = {
-  model: mongoose.model("Thing", ThingSchema)
-}
+  ThingSchema.post("remove", function (doc) {
+    myEmitter.emit("remove", doc);
+  });
+  return mongoose.model("Thing", ThingSchema);
+};
+
+module.exports.get = function () {
+  return mongoose.model("Thing");
+};
