@@ -15,7 +15,7 @@ import { AuthGuardService } from './auth-guard.service';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
-const config: SocketIoConfig = { url: 'http://localhost:9000', options: {}};
+const config: SocketIoConfig = { url: 'http://localhost:9000/', options: {}};
 
 @NgModule({
   declarations: [

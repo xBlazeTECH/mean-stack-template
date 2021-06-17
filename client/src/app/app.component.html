@@ -26,7 +26,7 @@
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
             <li><h6 class="dropdown-header">Signed in as</h6></li>
-            <li><a class="dropdown-item" routerLink="/account/profile">{{ userDetails.name }}</a></li>
+            <li><a class="dropdown-item" routerLink="/account/profile">{{ (userDetails ? userDetails.name : '') }}</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" routerLink="/account/profile">Your profile</a></li>
             <li><hr class="dropdown-divider"></li>

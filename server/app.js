@@ -12,12 +12,24 @@ if (config.seedDB) { require('./config/seed'); }
 const app = express();
 const server = require('http').createServer(app);
 const socketio = require('socket.io')(server, {
-  serveClient: (config.env === 'production') ? false : true,
-  path: '/socket.io-client'
+  serveClient: true,
+  //serveClient: (config.env === 'production') ? false : true,
+  path: '/socket.io',
+  cors: {
+    origin: "http://localhost:4200",
+    methods: ["GET","POST"]
+  }
 });
-require('./config/socketio')(socketio);
+
+socketio.on('connection', function(socket) {
+  socket.emit('connected');
+  socket.emit('pong');
+})
+
+require('./config/socketio')(socketio, app);
 require('./config/express')(app);
 require('./routes')(app);
+
 
 server.listen(config.port, config.ip, function() {
   console.log(`Express server listening on ${config.port}, in ${app.get('env')} mode.`);
