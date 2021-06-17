@@ -15,8 +15,8 @@ export class SocketService {
     this.socket.emit(event, data);
   }
 
-  public syncUpdates(event: string): Observable<any> {
-    this.logger.log("SyncUpdates: " + event);
+  public listen(event: string): Observable<any> {
+    this.logger.log("listening for: " + event);
     return new Observable((observer) => {
       this.socket.on(event, (data: any) => {
         observer.next(data);
@@ -24,13 +24,36 @@ export class SocketService {
     })
   }
 
-  public changeDoc(event: string) {
-    this.socket.emit(event + ':save');
+  public syncUpdates(model: string, array: any[]): any {
+    this.logger.log('SyncUpdates: ' + model);
+    this.listen(model + ':save').subscribe((item: any) => {
+      var oldItem = array.find(
+        (item) => item._id === item._id
+      );
+      var index = array.indexOf(oldItem);
+      var event = 'created';
+
+      console.log(oldItem);
+
+      if (oldItem) {
+        array.splice(index, 1, item);
+        event = 'updated';
+      } else {
+        array.push(item);
+      }
+    });
+
+    this.listen(model + ':remove').subscribe((item: any) => {
+      var event = 'deleted';
+      var oldItem = array.find((i) => i._id === item._id);
+      var index = array.indexOf(oldItem);
+      array.splice(index, 1);
+    })
   }
 
-  public unsyncUpdates(event: string): void {
-    this.logger.log('UnSyncUpdates: ' + event);
-    this.socket.removeListener(event);
+  public unsyncUpdates(model: string): void {
+    this.logger.log('UnSyncUpdates: ' + model);
+    this.socket.removeListener(model);
   }
 
   public unSyncAllUpdates(): void {
