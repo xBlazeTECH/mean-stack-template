@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Thing = require("../api/thing/thing.model").get();
+const Thing = require("../api/thing/thing.model").getModel();
 var User = require("../api/user/user.model");
 
 Thing.find({}).remove(function () {

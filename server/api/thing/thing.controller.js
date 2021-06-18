@@ -10,7 +10,7 @@
 var _ = require("lodash");
 //var Thing = require("./thing.model");
 
-var Thing = require("./thing.model").get();
+var Thing = require("./thing.model").getModel();
 
 // Get list of things
 exports.index = function (req, res) {

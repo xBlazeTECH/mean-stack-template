@@ -1,26 +1,18 @@
-//var thing = require("./thing.model");
+var model = require("./thing.model").getModel();
 
 exports.register = function (socket, myEmitter) {
   console.log("Registering Thing Socket!");
 
-  myEmitter.on('save', function (doc) {
+  myEmitter.on(`${model.modelName.toLowerCase()}:save`, function (doc) {
     console.log("Saved Thing: " + doc);
     onSave(socket, doc);
   })
 
-  myEmitter.on('remove', function (doc) {
+  myEmitter.on(`${model.modelName.toLowerCase()}:remove`, function (doc) {
     console.log("Removed Thing" + doc);
     onRemove(socket, doc);
-  })
+  });
 
-  // thing.schema.post("save", function (doc) {
-  //   console.log("Saved Thing");
-  //   onSave(socket, doc);
-  // });
-  // thing.schema.post("remove", function (doc) {
-  //   console.log("Removed Thing");
-  //   onRemove(socket, doc);
-  // });
   console.log("Registered Thing Socket!");
 };
 
@@ -30,8 +22,4 @@ function onSave(socket, doc, cb) {
 
 function onRemove(socket, doc, cb) {
   socket.emit("thing:remove", doc);
-}
-
-function doStuff() {
-  console.log('stuff was done');
 }
