@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.http.get('/api/things').subscribe((awesomeThings: any) => {
       this.awesomeThings = awesomeThings;
-      console.log(this.awesomeThings);
       this.socketService.connected().subscribe((thing: any) => {
         this.socketService.syncUpdates('thing', this.awesomeThings);
       });
@@ -31,17 +30,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   addThing(): void {
+    console.log('addThing');
     if (!this.newThing.name || this.newThing.name === '') return;
     this.http.post('/api/things', this.newThing).subscribe((data: any) => {
-      console.log(data);
-      this.awesomeThings.push(data);
+      //this.awesomeThings.push(data);
       this.newThing = {};
     });
   }
 
   deleteThing(thing: any): void {
-    this.http.delete(`/api/things/${thing._id}`).subscribe((data: any) => {
-      console.log(data);
-    });
+    console.log('deleteThing');
+    console.log(thing);
+    this.http.delete(`/api/things/${thing._id}`).subscribe((data: any) => {});
   }
 }

@@ -4,12 +4,12 @@ exports.register = function (socket, myEmitter) {
   console.log("Registering Thing Socket!");
 
   myEmitter.on('save', function (doc) {
-    console.log("Saved Thing");
+    console.log("Saved Thing: " + doc);
     onSave(socket, doc);
   })
 
   myEmitter.on('remove', function (doc) {
-    console.log("Removed Thing");
+    console.log("Removed Thing" + doc);
     onRemove(socket, doc);
   })
 
