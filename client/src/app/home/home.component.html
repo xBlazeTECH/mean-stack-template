@@ -18,23 +18,25 @@
         <h5 class="card-title">{{thing.name}}</h5>
         <!-- <h6 class="card-subtitle"></h6> -->
         <p class="card-text">{{thing.info}}</p>
-        <a class="card-link" routerLink="">Edit</a>
+        <a class="card-link" routerLink="" (click)="editThing(thing);">Edit</a>
         <a class="card-link" routerLink="" (click)="deleteThing(thing);">Delete</a>
       </div>
     </div>
   </div>
 
+  <h2>{{isEditing?'Edit Thing':'Add Thing'}}</h2>
+
   <form class="thing-form">
     <div class="mb-3">
       <label for="thingNameInput" class="form-label">Name</label>
-      <input type="text" class="form-control" id="thingNameInput" name="name" [(ngModel)]="newThing.name">
+      <input type="text" class="form-control" id="thingNameInput" name="name" [(ngModel)]="activeThing.name">
     </div>
     <div class="mb-3">
       <label for="thingInfoInput" class="form-label">Information</label>
-      <textarea class="form-control" id="thingInfoInput" rows="3" name="info" [(ngModel)]="newThing.info"></textarea>
+      <textarea class="form-control" id="thingInfoInput" rows="3" name="info" [(ngModel)]="activeThing.info"></textarea>
     </div>
     <div class="mb-3">
-      <button type="submit" class="btn btn-primary" (click)="addThing()">Save</button>
+      <button type="submit" class="btn btn-primary" (click)="saveThing()">{{isEditing? 'Update':'Save' }}</button>
     </div>
   </form>
 </div>

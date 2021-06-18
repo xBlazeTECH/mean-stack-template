@@ -13,7 +13,8 @@ import { SocketService } from '../socket.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public awesomeThings: any[] = [];
-  public newThing: any = {};
+  public activeThing: any = {};
+  public isEditing: boolean = false;
 
   constructor(private logger: LogService, private http: HttpClient, private socketService: SocketService, public auth: AuthenticationService) {}
 
@@ -28,22 +29,28 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.socketService.syncUpdates('thing', this.awesomeThings);
       })
     })
-    // this.http.get('/api/things').subscribe((awesomeThings: any) => {
-    //   this.awesomeThings = awesomeThings;
-    //   this.socketService.connected().subscribe((thing: any) => {
-    //     console.log('backend connected, resyncing things');
-    //     this.socketService.syncUpdates('thing', this.awesomeThings);
-    //   });
-    // });
   }
 
-  addThing(): void {
-    console.log('addThing');
-    if (!this.newThing.name || this.newThing.name === '') return;
-    this.http.post('/api/things', this.newThing).subscribe((data: any) => {
-      //this.awesomeThings.push(data);
-      this.newThing = {};
-    });
+  saveThing(): void {
+    console.log('saveThing');
+    if (!this.activeThing.name || this.activeThing.name === '') return;
+    if (this.isEditing) {
+      this.http.put(`/api/things/${this.activeThing._id}`, this.activeThing).subscribe((data: any) => {
+        this.isEditing = false;
+        this.activeThing = {};
+      })
+    } else {
+      this.http.post('/api/things', this.activeThing).subscribe((data: any) => {
+        //this.awesomeThings.push(data);
+        this.activeThing = {};
+      });
+    }
+  }
+
+  editThing(thing: any): void {
+    console.log('editThing');
+    this.isEditing = true;
+    this.activeThing = JSON.parse(JSON.stringify(thing));
   }
 
   deleteThing(thing: any): void {
