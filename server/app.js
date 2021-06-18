@@ -22,6 +22,7 @@ const socketio = require('socket.io')(server, {
   }
 });
 
+// Register the models with a change listener.
 require('./models').register(listener);
 
 if (config.seedDB) {
