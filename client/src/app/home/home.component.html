@@ -1,4 +1,4 @@
-  <div class="px-4 py-5 my-5 text-center">
+  <div class="px-4 py-5 my-5 text-center" *ngIf="!auth.isLoggedIn();">
     <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
     <h1 class="display-5 fw-bold">Centered hero</h1>
     <div class="col-lg-6 mx-auto">
@@ -11,12 +11,43 @@
   </div>
 
   <div class="container">
-    <div class="row">
+    <h1 class="page-header">Features</h1>
+    <div class="row row-cols-3">
+      <div class="card col" *ngFor="let thing of awesomeThings">
+        <div class="card-body">
+          <h5 class="card-title">{{thing.name}}</h5>
+          <!-- <h6 class="card-subtitle"></h6> -->
+          <p class="card-text">{{thing.info}}</p>
+          <a class="card-link" routerLink="">Edit</a>
+          <a class="card-link" routerLink="" (click)="deleteThing(thing);">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row row-cols-3">
       <div class="col-lg-12">
         <h1 class="page-header">Features</h1>
+
+        <div class="row row-cols-3">
+          <div class="card row row-cols-3" *ngFor="let thing of awesomeThings">
+            <div class="card-body">
+              <h5 class="card-title">Card Title</h5>
+              <h6 class="card-subtitle">Card Subtitle</h6>
+              <p class="card-text">Some quick example text to build on the card title</p>
+              <a href="#" class="card-link">Edit</a>
+              <a href="#" class="card-link">Delete</a>
+            </div>
+          </div>
+        </div>
+
+
+
+
         <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6">
         <li *ngFor="let thing of awesomeThings">
-          <a href="#">{{thing.name}}<button type="button" class="close" (click)="deleteThing(thing)">&times;</button></a>
+          <a href="#" tooltip="hi">{{thing.name}}<button type="button" class="close" (click)="deleteThing(thing)">&times;</button></a>
         </li>
         </ul>
       </div>

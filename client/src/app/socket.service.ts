@@ -80,9 +80,7 @@ export class SocketService {
   }
 
   public connected(): Observable<any> {
-    return new Observable((obs) => {
-      this.socket.on('connected', () => obs.next())
-    })
+    return new Observable((obs) => { this.socket.on('connected', () => obs.next()) })
   }
 
 }

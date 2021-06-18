@@ -6,7 +6,7 @@ function onDisconnect(socket) {
 
 function onConnect(socket, myEmitter) {
   // Send a message to connected clients.
-  socket.emit('connected', {});
+  socket.emit('connected');
   socket.on('info', function (data) {
     console.info(`[${socket.handshake.address}] ${JSON.stringify(data, null, 2)}`);
   });
