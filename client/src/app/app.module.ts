@@ -10,8 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './account/login/login.component';
 import { ProfileComponent } from './account/profile/profile.component';
 import { RegisterComponent } from './account/register/register.component';
-import { AuthenticationService } from './authentication.service';
-import { AuthGuardService } from './auth-guard.service';
+import { AuthenticationService } from './services/auth/authentication.service';
+import { AuthGuardService } from './services/auth/auth-guard.service';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 

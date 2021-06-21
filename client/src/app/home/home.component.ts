@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
-import { LogService } from '../log.service';
-import { SocketService } from '../socket.service';
+import { AuthenticationService } from '../services/auth/authentication.service';
+import { LogService } from '../services/log/log.service';
+import { SocketService } from '../services/socket/socket.service';
 
 @Component({
   selector: 'app-home',

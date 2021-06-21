@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
-import { LogService } from './log.service';
+import { LogService } from '../log/log.service';
 
 @Injectable({
   providedIn: 'root'
