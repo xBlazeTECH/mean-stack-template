@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
-import { find } from 'rxjs/operators';
 import { AuthenticationService } from '../authentication.service';
 import { LogService } from '../log.service';
 import { SocketService } from '../socket.service';
@@ -41,7 +39,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
     } else {
       this.http.post('/api/things', this.activeThing).subscribe((data: any) => {
-        //this.awesomeThings.push(data);
         this.activeThing = {};
       });
     }
