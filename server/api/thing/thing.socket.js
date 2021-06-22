@@ -4,12 +4,12 @@ exports.register = function (socket, myEmitter) {
   console.log("Registering Thing Socket!");
 
   myEmitter.on(`${model.modelName.toLowerCase()}:save`, function (doc) {
-    console.log("Saved Thing: " + doc._id);
+    console.log(`${model.modelName}:save - ${doc._id}`);
     onSave(socket, doc);
   })
 
   myEmitter.on(`${model.modelName.toLowerCase()}:remove`, function (doc) {
-    console.log("Removed Thing" + doc._id);
+    console.log(`${model.modelName}:remove - ${doc._id}`);
     onRemove(socket, doc);
   });
 
