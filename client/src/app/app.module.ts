@@ -14,6 +14,8 @@ import { AuthenticationService } from './services/auth/authentication.service';
 import { AuthGuardService } from './services/auth/auth-guard.service';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { MdtComponent } from './mdt/mdt.component';
+import { CadComponent } from './cad/cad.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:9000/', options: {}};
 
@@ -23,7 +25,9 @@ const config: SocketIoConfig = { url: 'http://localhost:9000/', options: {}};
     HomeComponent,
     LoginComponent,
     ProfileComponent,
-    RegisterComponent
+    RegisterComponent,
+    MdtComponent,
+    CadComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,7 @@ const config: SocketIoConfig = { url: 'http://localhost:9000/', options: {}};
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
   ],
   providers: [AuthenticationService, AuthGuardService],
   bootstrap: [AppComponent]

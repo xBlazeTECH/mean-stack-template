@@ -1,0 +1,118 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          Active Calls
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Call ID</th>
+              <th scope="col">Call Type</th>
+              <th scope="col">Units</th>
+              <th scope="col">Location</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let call of activeCalls">
+              <th scope="row">{{call.id}}</th>
+              <td>{{call.type}}</td>
+              <td>{{call.units}}</td>
+              <td>{{call.location}}</td>
+              <td>
+                <input type="button" class="btn btn-danger" value="Clear" (click)="clearCall(call.id);"/>
+                <input type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="Details" (click)="callDetails(call.id);"/>
+                <input type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalAssignUnit" value="Assign"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Incident Number: {{currentCall.id}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Call Type</span>
+            <input type="text" class="form-control" id="detailIncidentType" placeholder="" name="detailIncidentType" [(ngModel)]="currentCall.type" autocomplete="off">
+            <button class="btn btn-outline-secondary" type="button" id="detEditType">Edit</button>
+          </div>
+          <div class="input-group mb-3">
+            <label for="detailIncidentLocation" class="form-label">Location</label>
+            <input type="text" class="form-control" id="detailIncidentLocation" placeholder="" name="detailIncidentLocation" [(ngModel)]="currentCall.address" autocomplete="off">
+          </div>
+          <div class="input-group mb-3">
+            <label for="detailIncidentCrossStreet" class="form-label">Cross Street</label>
+            <input type="text" class="form-control" id="detailIncidentCrossStreet" placeholder="" name="detailIncidentCrossStreet" [(ngModel)]="currentCall.crossStreet" autocomplete="off">
+          </div>
+          <div class="input-group mb-3">
+            <label for="detailIncidentPremise" class="form-label">Premise</label>
+            <input type="text" class="form-control" id="detailIncidentPremise" placeholder="" name="detailIncidentPremise" [(ngModel)]="currentCall.premise" autocomplete="off">
+          </div>
+          <div class="input-group mb-3">
+            <label for="detailIncidentNotes" class="form-label">Incident Notes</label>
+            <textarea class="form-control" id="detailIncidentNotes" rows="5" name="detailIncidentNotes" [(ngModel)]="currentCall.notes" autocomplete="off" disabled></textarea>
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="detailIncidentNoteInput" placeholder="" name="detailIncidentNoteInput" [(ngModel)]="newCallNote">
+            <button class="btn btn-outline-secondary" type="button" id="detAddNote">Add Note</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAssignUnit" tabindex="-1" aria-labelledby="modalAssignUnitLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAssignUnitLabel">Assign Unit to Call: {{currentCall.id}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 input-group">
+          <select class="form-select" aria-label="Default Select Example">
+            <option select>Pick a unit to assign.</option>
+            <option *ngFor="let unit of activeUnits">[{{unit.callsign}}] {{unit.name}}</option>
+          </select>
+          <button class="btn btn-outline-secondary" type="button" id="button-addon2">Assign</button>
+        </div>
+        <div class="mb-3">
+          <label for="currentUnits" class="form-label">Click Unit to Clear</label>
+          <select class="form-select" multiple>
+            <option *ngFor="let unit of currentCall.units">[{{unit.callsign}}] {{unit.name}}</option>
+          </select>
+        </div>
+
+
+        <div class="mb-3">
+          <label for="detailIncidentNotes" class="form-label">Incident Notes</label>
+          <textarea class="form-control" id="detailIncidentNotes" rows="5" disabled></textarea>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="detailIncidentID" placeholder="">
+          <button class="btn btn-outline-secondary" type="button" id="detAddNote">Add Note</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
