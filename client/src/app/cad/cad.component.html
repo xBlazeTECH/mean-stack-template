@@ -1,34 +1,99 @@
-<div class="container">
+<div class="px-5 py-3">
   <div class="row">
     <div class="col">
       <div class="card">
-        <div class="card-header">
-          Active Calls
+        <div class="card-header">Emergency Calls</div>
+        <div class="card-body">
+          <h5 class="card-title">Pending Calls</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Call ID</th>
+                <th scope="col">Call Type</th>
+                <th scope="col">Location</th>
+                <th scope="col">Actions</th>
+                <th scope="col">Time Elapsed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-warning">
+                <th scope="row">123</th>
+                <td>Unknown Medical</td>
+                <td>Location Pending</td>
+                <td>
+                  <input type="button" class="btn btn-sm btn-danger" value="Ignore" />
+                  <input type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="Details" />
+                  <input type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalAssignUnit" value="Dispatch"/>
+                </td>
+                <td>0:00</td>
+              </tr>
+            </tbody>
+          </table>
+          <h5 class="card-title">Active Calls</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Call ID</th>
+                <th scope="col">Call Type</th>
+                <th scope="col">Units</th>
+                <th scope="col">Location</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let call of activeCalls">
+                <th scope="row">{{call.id}}</th>
+                <td>{{call.type.code}} | {{getIncidentTypeText(call.type.code)}}</td>
+                <td>{{call.units}}</td>
+                <td>{{call.location.numeric}} {{call.location.street}}</td>
+                <td>
+                  <input type="button" class="btn btn-sm btn-danger" value="Clear" (click)="clearCall(call.id);"/>
+                  <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="Details" (click)="callDetails(call.id);">Details <span class="badge bg-secondary" *ngIf="call.updates && call.updates > 0">{{call.updates}}</span></button>
+                  <input type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalAssignUnit" value="Assign"/>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Call ID</th>
-              <th scope="col">Call Type</th>
-              <th scope="col">Units</th>
-              <th scope="col">Location</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let call of activeCalls">
-              <th scope="row">{{call.id}}</th>
-              <td>{{call.type}}</td>
-              <td>{{call.units}}</td>
-              <td>{{call.location}}</td>
-              <td>
-                <input type="button" class="btn btn-danger" value="Clear" (click)="clearCall(call.id);"/>
-                <input type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="Details" (click)="callDetails(call.id);"/>
-                <input type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalAssignUnit" value="Assign"/>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row py-3">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">Active BOLOs</div>
+        <div class="card-body">
+          <h5 class="card-title">Persons BOLOs</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Physical Description</th>
+                <th scope="col">Reason Wanted</th>
+                <th scope="col">Last Seen</th>
+                <th scope="col">Time Remaining</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+          </table>
+          <h5 class="card-title">Vehicle BOLOs</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Physical Description</th>
+                <th scope="col">Reason Wanted</th>
+                <th scope="col">Last Seen</th>
+                <th scope="col">Time Remaining</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -44,30 +109,37 @@
       </div>
       <div class="modal-body">
         <form autocomplete="off">
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">Call Type</span>
-            <input type="text" class="form-control" id="detailIncidentType" placeholder="" name="detailIncidentType" [(ngModel)]="currentCall.type" autocomplete="off">
-            <button class="btn btn-outline-secondary" type="button" id="detEditType">Edit</button>
+          <div class="mb-3">
+            <label for="detailIncidentType" class="form-label">Incident Type</label>
+            <div class="input-group">
+              <select class="form-select" [(ngModel)]="currentCall.type.code" name="newIncidentT" (ngModelChange)="callTypeUpdated($event);">
+                <option *ngFor="let item of incidentTypes;" [value]="item.code">{{item.code}} | {{item.text}}</option>
+              </select>
+            </div>
           </div>
-          <div class="input-group mb-3">
+          <div class="mb-3">
             <label for="detailIncidentLocation" class="form-label">Location</label>
-            <input type="text" class="form-control" id="detailIncidentLocation" placeholder="" name="detailIncidentLocation" [(ngModel)]="currentCall.address" autocomplete="off">
+            <div class="input-group">
+              <input type="text" style="max-width:90px;" class="form-control" id="detailIncidentLocNumeric" placeholder="####" name="detailIncidentLocNumeric" [(ngModel)]="updatedCall.location.numeric" autocomplete="off" (ngModelChange)="callLocationUpdated($event);">
+              <input type="text" class="form-control" id="detailIncidentLocStreet" placeholder="Street Name" name="detailIncidentLocStreet" [(ngModel)]="updatedCall.location.street" autocomplete="off" (ngModelChange)="callLocationUpdated($event);">
+              <button type="button" class="btn btn-primary" (click)="updateCallLocation()" [disabled]="!isLocationUpdated">Update</button>
+            </div>
           </div>
-          <div class="input-group mb-3">
+          <!-- <div class="mb-3">
             <label for="detailIncidentCrossStreet" class="form-label">Cross Street</label>
             <input type="text" class="form-control" id="detailIncidentCrossStreet" placeholder="" name="detailIncidentCrossStreet" [(ngModel)]="currentCall.crossStreet" autocomplete="off">
-          </div>
-          <div class="input-group mb-3">
+          </div> -->
+          <div class="mb-3">
             <label for="detailIncidentPremise" class="form-label">Premise</label>
             <input type="text" class="form-control" id="detailIncidentPremise" placeholder="" name="detailIncidentPremise" [(ngModel)]="currentCall.premise" autocomplete="off">
           </div>
-          <div class="input-group mb-3">
+          <div class="mb-3">
             <label for="detailIncidentNotes" class="form-label">Incident Notes</label>
-            <textarea class="form-control" id="detailIncidentNotes" rows="5" name="detailIncidentNotes" [(ngModel)]="currentCall.notes" autocomplete="off" disabled></textarea>
+            <textarea class="form-control form-control-sm" id="detailIncidentNotes" rows="5" name="detailIncidentNotes" [(ngModel)]="currentCall.notes" autocomplete="off" disabled></textarea>
           </div>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" id="detailIncidentNoteInput" placeholder="" name="detailIncidentNoteInput" [(ngModel)]="newCallNote">
-            <button class="btn btn-outline-secondary" type="button" id="detAddNote">Add Note</button>
+            <input type="text" class="form-control" id="detailIncidentNoteInput" placeholder="" name="detailIncidentNoteInput" [(ngModel)]="newCallNote" (keydown.enter)="inputCallNote()">
+            <a [routerLink]="" class="btn btn-outline-secondary" type="button" id="detAddNote" (click)="inputCallNote()">Add Note</a>
           </div>
         </form>
       </div>
