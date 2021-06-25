@@ -1,0 +1,203 @@
+<div class="px-5 py-3">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">Emergency Calls</div>
+        <div class="card-body">
+          <h5 class="card-title">Pending Calls</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Call ID</th>
+                <th scope="col">Call Type</th>
+                <th scope="col">Location</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-warning">
+                <th scope="row">123</th>
+                <td>Unknown Medical</td>
+                <td>Location Pending</td>
+                <td>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <input type="button" class="btn btn-sm btn-danger" value="Ignore" />
+                    <input type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="Details" />
+                    <input type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalAssignUnit" value="Dispatch"/>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h5 class="card-title">Active Calls</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Call ID</th>
+                <th scope="col">Call Type</th>
+                <th scope="col">Units</th>
+                <th scope="col">Location</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let call of activeCalls">
+                <th scope="row">{{call.id}}</th>
+                <td>{{call.type.code}} | {{getIncidentTypeText(call.type.code)}}</td>
+                <td>{{call.units}}</td>
+                <td>{{call.location.numeric}} {{call.location.street}}</td>
+                <td>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <input type="button" class="btn btn-sm btn-danger" value="Clear" (click)="clearCall(call.id);"/>
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" value="Details" (click)="callDetails(call.id);">Details <span class="badge bg-secondary" *ngIf="call.updates && call.updates > 0">{{call.updates}}</span></button>
+                    <input type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalAssignUnit" value="Assign"/>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <div class="btn-group" role="group">
+              <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">New</button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop">
+                <li><a class="dropdown-item" href="#">Pending Call</a></li>
+                <li><a class="dropdown-item" href="#">Active Call</a></li>
+              </ul>
+            </div>
+            <button type="button" class="btn btn-primary">Start Traffic Stop</button>
+            <button type="button" class="btn btn-primary">Flag Down</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row py-3">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">Active BOLOs</div>
+        <div class="card-body">
+          <h5 class="card-title">Persons BOLOs</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Physical Description</th>
+                <th scope="col">Reason Wanted</th>
+                <th scope="col">Last Seen</th>
+                <th scope="col">Time Remaining</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+          </table>
+          <h5 class="card-title">Vehicle BOLOs</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Physical Description</th>
+                <th scope="col">Reason Wanted</th>
+                <th scope="col">Last Seen</th>
+                <th scope="col">Time Remaining</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Incident Number: {{currentCall.id}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off">
+          <div class="mb-3">
+            <label for="detailIncidentType" class="form-label">Incident Type</label>
+            <div class="input-group">
+              <select class="form-select" [(ngModel)]="currentCall.type.code" name="newIncidentT" (ngModelChange)="callTypeUpdated($event);">
+                <option *ngFor="let item of incidentTypes;" [value]="item.code">{{item.code}} | {{item.text}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="detailIncidentLocation" class="form-label">Location</label>
+            <div class="input-group">
+              <input type="text" style="max-width:90px;" class="form-control" id="detailIncidentLocNumeric" placeholder="####" name="detailIncidentLocNumeric" [(ngModel)]="updatedCall.location.numeric" autocomplete="off" (ngModelChange)="callLocationUpdated($event);">
+              <input type="text" class="form-control" id="detailIncidentLocStreet" placeholder="Street Name" name="detailIncidentLocStreet" [(ngModel)]="updatedCall.location.street" autocomplete="off" (ngModelChange)="callLocationUpdated($event);">
+              <button type="button" class="btn btn-primary" (click)="updateCallLocation()" [disabled]="!isLocationUpdated">Update</button>
+            </div>
+          </div>
+          <!-- <div class="mb-3">
+            <label for="detailIncidentCrossStreet" class="form-label">Cross Street</label>
+            <input type="text" class="form-control" id="detailIncidentCrossStreet" placeholder="" name="detailIncidentCrossStreet" [(ngModel)]="currentCall.crossStreet" autocomplete="off">
+          </div> -->
+          <div class="mb-3">
+            <label for="detailIncidentPremise" class="form-label">Premise</label>
+            <input type="text" class="form-control" id="detailIncidentPremise" placeholder="" name="detailIncidentPremise" [(ngModel)]="currentCall.premise" autocomplete="off">
+          </div>
+          <div class="mb-3">
+            <label for="detailIncidentNotes" class="form-label">Incident Notes</label>
+            <textarea class="form-control form-control-sm" id="detailIncidentNotes" rows="5" name="detailIncidentNotes" [(ngModel)]="currentCall.notes" autocomplete="off" disabled></textarea>
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="detailIncidentNoteInput" placeholder="" name="detailIncidentNoteInput" [(ngModel)]="newCallNote" (keydown.enter)="inputCallNote()">
+            <a [routerLink]="" class="btn btn-outline-secondary" type="button" id="detAddNote" (click)="inputCallNote()">Add Note</a>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAssignUnit" tabindex="-1" aria-labelledby="modalAssignUnitLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAssignUnitLabel">Assign Unit to Call: {{currentCall.id}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 input-group">
+          <select class="form-select" aria-label="Default Select Example">
+            <option select>Pick a unit to assign.</option>
+            <option *ngFor="let unit of activeUnits">[{{unit.callsign}}] {{unit.name}}</option>
+          </select>
+          <button class="btn btn-outline-secondary" type="button" id="button-addon2">Assign</button>
+        </div>
+        <div class="mb-3">
+          <label for="currentUnits" class="form-label">Click Unit to Clear</label>
+          <select class="form-select" multiple>
+            <option *ngFor="let unit of currentCall.units">[{{unit.callsign}}] {{unit.name}}</option>
+          </select>
+        </div>
+
+
+        <div class="mb-3">
+          <label for="detailIncidentNotes" class="form-label">Incident Notes</label>
+          <textarea class="form-control" id="detailIncidentNotes" rows="5" disabled></textarea>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="detailIncidentID" placeholder="">
+          <button class="btn btn-outline-secondary" type="button" id="detAddNote">Add Note</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
