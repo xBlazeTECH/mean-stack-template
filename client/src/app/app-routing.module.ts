@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from './services/auth/auth-guard.service';
 import { HomeComponent } from './main/home/home.component';
 import { LoginComponent } from './account/login/login.component';
-import { ProfileComponent } from './account/profile/profile.component';
 import { RegisterComponent } from './account/register/register.component';
 import { CadComponent } from './main/cad/cad.component';
 import { MdtComponent } from './main/mdt/mdt.component';
@@ -16,11 +15,6 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent }
     ]
-  },
-  {
-    path: 'account/profile',
-    component: ProfileComponent,
-    canActivate: [AuthGuardService],
   },
   { path: 'cad', component: CadComponent},
   { path: 'mdt', component: MdtComponent}

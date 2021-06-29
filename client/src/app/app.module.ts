@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './main/home/home.component';
 import { LoginComponent } from './account/login/login.component';
-import { ProfileComponent } from './account/profile/profile.component';
 import { RegisterComponent } from './account/register/register.component';
 import { AuthenticationService } from './services/auth/authentication.service';
 import { AuthGuardService } from './services/auth/auth-guard.service';
@@ -28,7 +27,6 @@ const config: SocketIoConfig = { url: 'http://localhost:9000/', options: {}};
     AppComponent,
     HomeComponent,
     LoginComponent,
-    ProfileComponent,
     RegisterComponent,
     MdtComponent,
     CadComponent,

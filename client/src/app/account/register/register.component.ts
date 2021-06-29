@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { AuthenticationService, TokenPayload } from '../../services/auth/authentication.service';
 
 @Component({
@@ -8,41 +10,50 @@ import { AuthenticationService, TokenPayload } from '../../services/auth/authent
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-  error: string | undefined = undefined;
+  form!: FormGroup;
+  loading = false;
+  submitted = false;
 
-  passConf!: string;
+  constructor(
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+  ) { }
 
-  credentials: TokenPayload = {
-    email: '',
-    name: '',
-    password: '',
-  };
-
-  constructor(private auth: AuthenticationService, private router: Router) {}
-
-  register() {
-    if (this.credentials.password === this.passConf) {
-      this.auth.register(this.credentials).subscribe(
-        () => {
-          this.router.navigateByUrl('/profile');
-        },
-        (err) => {
-          console.log(err);
-          switch (err.error.message) {
-            case 'All fields required':
-              this.error = 'Please fill out all required fields';
-              break;
-            case 'User already exists':
-              this.error = 'A user with this email already exists';
-              break;
-            default:
-              this.error = 'Unexpected Error Occured';
-          }
-        }
-      );
-    } else {
-      this.error = 'Password and confirmation do not match';
-    }
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required, Validators.minLength(6)]
+    })
   }
-  ngOnInit(): void {}
+
+  get f() { return this.form.controls; }
+
+  onSubmit() {
+    this.submitted = true;
+
+    // reset alerts on submit
+    // this.alertService.clear();
+
+    // stop here if form is invalid
+    if (this.form.invalid) return;
+
+    this.loading = true;
+    this.authenticationService.register(this.form.value)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          // this.alertService.success('Registration Successful', { keepAfterRouteChange: true });
+          this.router.navigate(['../login'], { relativeTo: this.route });
+        },
+        error: error => {
+          // this.alertService.error(error);
+          this.loading = false;
+        }
+      })
+  }
+
 }

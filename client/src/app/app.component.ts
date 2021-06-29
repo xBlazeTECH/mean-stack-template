@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService, UserDetails } from './services/auth/authentication.service';
+import { User } from './_models/user.model';
 
 @Component({
   selector: 'app-root',
@@ -7,18 +8,17 @@ import { AuthenticationService, UserDetails } from './services/auth/authenticati
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  userDetails!: UserDetails;
+  user!: User;
 
-  constructor(public auth: AuthenticationService) {}
+  constructor(public authenticationService: AuthenticationService) {
+    this.authenticationService.user.subscribe(x => this.user = x);
+  }
 
   ngOnInit() {
-    this.auth.profile().subscribe(
-      (user) => {
-        this.userDetails = user;
-      },
-      (err) => {
-        console.error(err);
-      }
-    );
+
+  }
+
+  logout() {
+    this.authenticationService.logout();
   }
 }
